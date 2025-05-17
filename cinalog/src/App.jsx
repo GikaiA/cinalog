@@ -5,7 +5,7 @@ import Search from './Search/Search';
 import Navbar from './Navbar/Navbar';
 import Profile from './Profile/Profile';
 import Footer from './Footer/Footer';
-import Register from './Register/Register';
+import Register from './Register/register';
 
 function App() {
   return (
