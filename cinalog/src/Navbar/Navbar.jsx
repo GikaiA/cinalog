@@ -8,7 +8,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="logo">
         <a href="/" className="logo-link">
-        <p>Cinalog</p>
+        <p className='title'>Cinalog</p>
         </a>
       </div>
       <ul className={isOpen ? "nav-menu open" : "nav-menu"}>
@@ -16,7 +16,7 @@ function Navbar() {
           <a href="/login" className="nav-item">Login</a>
         </li>
         <li>
-          <a href="/register" className="nav-item">Register</a>
+          <a href="/register" className="nav-item">Create Account</a>
         </li>
         <div className="close-menu" onClick={() => setIsOpen(false)}>
           ✖

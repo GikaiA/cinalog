@@ -6,6 +6,7 @@ import Navbar from './Navbar/Navbar';
 import Profile from './Profile/Profile';
 import Footer from './Footer/Footer';
 import Register from './Register/register';
+import Login from "./Login/Login";
 
 function App() {
   return (
@@ -19,7 +20,6 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<Register/>}/>
           <Route path="/login" element={<Login/>}/>
-        
         </Routes>
       </BrowserRouter>
     </>
