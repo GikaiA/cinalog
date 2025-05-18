@@ -18,6 +18,9 @@ function Navbar() {
         <li>
           <a href="/register" className="nav-item">Create Account</a>
         </li>
+        <div className='search-bar-section'>
+          <input type='text' className='search-bar' alt='search-bar'></input>
+        </div>
         <div className="close-menu" onClick={() => setIsOpen(false)}>
           ✖
         </div>
