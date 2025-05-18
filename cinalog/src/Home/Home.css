@@ -1,9 +1,33 @@
-.home{
-
+.home {
 }
 
-.bg-wrapper{
-    background-image: url(../images/cinema.jpg);
-    background-repeat:no-repeat;
-    background-size: cover;
+.bg-wrapper {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cinemabg {
+  width: 100%;
+  height: 100;
+  min-height: 100%;
+  bottom: 0;
+  left: 0;
+  object-fit: cover;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.hero-section {
+  position: absolute;
+  text-align: center;
+  top: 40%;
+  width: 100%;
+  background-color: black;
+  height: 100%
+}
+
+.hero-title {
+  color: white;
 }
