@@ -1,14 +1,14 @@
 import React from 'react'
 import './Home.css';
-// import cinemabg from '../images/cinema.jpg';
+import cinemabg from '../videos/movie.mp4';
 
-function Home() {
+function Home() { 
   return (
     <div className='home'>
-        {/* <div className='bg-wrapper'>
-          <img src={cinemabg} alt='cinemabg' className='cinemabg'/>
-        </div> */}
       <div className='hero-section'>
+        <div className='hero-content'>
+          <video src={cinemabg} autoPlay loop muted className='hero-video'/>                          
+        </div>
         <h1 className='hero-title'>Welcome to Cinelog</h1>
       </div>
     </div>

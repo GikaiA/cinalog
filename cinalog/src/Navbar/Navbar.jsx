@@ -11,6 +11,9 @@ function Navbar() {
         <p className='title'>Cinalog</p>
         </a>
       </div>
+      <div className='search-bar-section'>
+          <input type='text' className='search-bar' alt='search-bar' placeholder='Search for a movie or tv show...'></input>
+        </div>
       <ul className={isOpen ? "nav-menu open" : "nav-menu"}>
         <li>
           <a href="/login" className="nav-item">Login</a>
@@ -18,9 +21,6 @@ function Navbar() {
         <li>
           <a href="/register" className="nav-item">Create Account</a>
         </li>
-        <div className='search-bar-section'>
-          <input type='text' className='search-bar' alt='search-bar'></input>
-        </div>
         <div className="close-menu" onClick={() => setIsOpen(false)}>
           ✖
         </div>
