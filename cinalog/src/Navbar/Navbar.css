@@ -2,10 +2,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: #000080; */
     color: white;
     font-family: "Supreme";
     font-weight: bold;
+    position:fixed;
+    top: 0;
+    width: 100%;
+    background-color: #000080;
+    z-index: 1000;
   }
   
 .title{

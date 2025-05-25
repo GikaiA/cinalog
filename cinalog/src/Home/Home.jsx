@@ -9,7 +9,17 @@ function Home() {
         <div className='hero-content'>
           <video src={cinemabg} autoPlay loop muted className='hero-video'/>                          
         </div>
-        <h1 className='hero-title'>Welcome to Cinelog</h1>
+        <div className='hero-title-container'>
+                  <h1 className='hero-title'>Welcome to Cinelog</h1>
+      <p className='hero-description'                     >
+        Your ultimate destination for all things cinema. Explore the latest movies,
+        find your favorite shows, and get the latest news in the world of cinema.
+      </p>
+        </div>
+        <div className='movies-tv-section'>
+          <h1 className='movies-tv-title'>Featured Movies & TV Shows</h1>
+
+        </div>
       </div>
     </div>
   )
