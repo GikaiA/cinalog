@@ -20,6 +20,14 @@ function Home() {
           <h1 className='movies-tv-title'>Featured Movies & TV Shows</h1>
 
         </div>
+        <div className='features-section'>
+          <h1>Cinalog lets you...</h1>
+          <div className='features-grid'>
+            <div className='feature-item'>
+              <p>Add movies to your watchlist</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

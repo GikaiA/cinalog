@@ -6,6 +6,7 @@ import Profile from './Profile/Profile';
 import Footer from './Footer/Footer';
 import Register from './Register/register';
 import Login from "./Login/Login";
+import MediaDetails from './MediaDetails/MediaDetails';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<Register/>}/>
           <Route path="/login" element={<Login/>}/>
+          <Route path="/:mediaType/:id" element={<MediaDetails />} />
         </Routes>
       </BrowserRouter>
     </>
