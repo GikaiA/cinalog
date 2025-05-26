@@ -6,11 +6,9 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="logo">
-        <a href="/" className="logo-link">
+        <a href="/" className="navbar-title">
         <p className='title'>Cinalog</p>
         </a>
-      </div>
       <div className='search-bar-section'>
           <input type='text' className='search-bar' alt='search-bar' placeholder='Search for a movie or tv show...'></input>
         </div>

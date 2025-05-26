@@ -1,28 +1,29 @@
-import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    emailOrUsername: '',
-    password: ''
+    emailOrUsername: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       // Try to sign in with email/password
@@ -33,20 +34,20 @@ const Login = () => {
       );
 
       // Redirect to profile page on successful login
-      navigate('/profile');
+      navigate("/profile");
     } catch (error) {
       switch (error.code) {
-        case 'auth/invalid-email':
-          setError('Invalid email address');
+        case "auth/invalid-email":
+          setError("Invalid email address");
           break;
-        case 'auth/user-not-found':
-          setError('No account found with this email');
+        case "auth/user-not-found":
+          setError("No account found with this email");
           break;
-        case 'auth/wrong-password':
-          setError('Incorrect password');
+        case "auth/wrong-password":
+          setError("Incorrect password");
           break;
         default:
-          setError('An error occurred during login');
+          setError("An error occurred during login");
       }
     }
   };
@@ -56,7 +57,7 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="login-form">
         <h2>Login</h2>
         {error && <div className="error-message">{error}</div>}
-        
+
         <div className="form-group">
           <label htmlFor="emailOrUsername">Email or Username</label>
           <input
@@ -83,7 +84,12 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit" className="login-button">Login</button>
+        <button type="submit" className="login-button">
+          Login
+        </button>
+        <p className="signup-link">
+          Don't have an account? <Link to="/register">Sign up</Link>
+        </p>
       </form>
     </div>
   );
