@@ -88,7 +88,7 @@ const Login = () => {
           Login
         </button>
         <p className="signup-link">
-          Don't have an account? <Link to="/register">Sign up</Link>
+          Don't have an account? <Link to="/register" className="link">Sign up</Link>
         </p>
       </form>
     </div>
