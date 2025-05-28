@@ -156,6 +156,27 @@
   color: #ff4444;
 }
 
+.review-title {
+  font-size: 45px;
+  display: flex;
+  justify-content: center;
+}
+
+.ratings-section {
+  display: block;
+}
+
+.rating {
+  background-color: rgb(90, 90, 90);
+  display: block;
+  width: 100%;
+  max-width: 800px;
+}
+
+.solid{
+  border-top: 1.5px solid #bbb;
+}
+
 @media (max-width: 768px) {
   .media-content {
     flex-direction: column;
@@ -183,4 +204,4 @@
     width: 120px;
     height: 180px;
   }
-} 
+}

@@ -48,3 +48,15 @@ display: block;
   font-size: 40px;
   color: white;
 }
+
+.features-grid{
+  display: flex;
+  justify-content: center;
+  column-gap: 120px;
+  row-gap: 0px;
+}
+
+.feature-item{
+  background-color: red;
+  font-size: 25px;
+}

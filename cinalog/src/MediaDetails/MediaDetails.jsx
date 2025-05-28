@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './MediaDetails.css';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import "./MediaDetails.css";
+import RatingReview from "../RatingReview";
 
-const TMDB_API_KEY = 'e58d19d46cc869a4aa7be5ac22a24e35'; // Replace with your TMDB API key
-const TMDB_API_BASE = 'https://api.themoviedb.org/3';
-const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
+const TMDB_API_KEY = "e58d19d46cc869a4aa7be5ac22a24e35"; // Replace with your TMDB API key
+const TMDB_API_BASE = "https://api.themoviedb.org/3";
+const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p";
 
 function MediaDetails() {
   const { mediaType, id } = useParams();
   const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [rating, setRating] = useState(0)
 
   useEffect(() => {
     const fetchMediaDetails = async () => {
@@ -20,11 +22,13 @@ function MediaDetails() {
           `${TMDB_API_BASE}/${mediaType}/${id}?api_key=${TMDB_API_KEY}&language=en-US&append_to_response=credits,videos`
         );
         const data = await response.json();
-        
+
         if (!response.ok) {
-          throw new Error(data.status_message || 'Failed to fetch media details');
+          throw new Error(
+            data.status_message || "Failed to fetch media details"
+          );
         }
-        
+
         setMedia(data);
         setError(null);
       } catch (err) {
@@ -62,35 +66,36 @@ function MediaDetails() {
     episode_run_time,
     genres,
     credits,
-    videos
+    videos,
   } = media;
 
-  const releaseYear = (release_date || first_air_date)?.split('-')[0];
-  const duration = runtime || (episode_run_time?.[0] || 0);
+  const releaseYear = (release_date || first_air_date)?.split("-")[0];
+  const duration = runtime || episode_run_time?.[0] || 0;
   const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
   const durationString = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
-  const trailer = videos?.results?.find(video => 
-    video.type === 'Trailer' && video.site === 'YouTube'
+  const trailer = videos?.results?.find(
+    (video) => video.type === "Trailer" && video.site === "YouTube"
   );
 
   return (
     <div className="media-details">
-      <div 
+      <div
         className="media-backdrop"
         style={{
-          backgroundImage: `url(${TMDB_IMAGE_BASE}/original${backdrop_path})`
+          backgroundImage: `url(${TMDB_IMAGE_BASE}/original${backdrop_path})`,
         }}
       >
         <div className="media-backdrop-overlay">
           <div className="media-content">
             <div className="media-poster">
-              <img 
+              <img
                 src={`${TMDB_IMAGE_BASE}/w500${poster_path}`}
                 alt={title || name}
                 onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/500x750?text=No+Image';
+                  e.target.src =
+                    "https://via.placeholder.com/500x750?text=No+Image";
                 }}
               />
             </div>
@@ -99,15 +104,19 @@ function MediaDetails() {
               <div className="media-meta">
                 <span className="media-year">{releaseYear}</span>
                 <span className="media-duration">{durationString}</span>
-                <span className="media-rating">★ {vote_average.toFixed(1)}</span>
+                <span className="media-rating">
+                  ★ {vote_average.toFixed(1)}
+                </span>
                 <div className="media-genres">
-                  {genres.map(genre => (
-                    <span key={genre.id} className="media-genre">{genre.name}</span>
+                  {genres.map((genre) => (
+                    <span key={genre.id} className="media-genre">
+                      {genre.name}
+                    </span>
                   ))}
                 </div>
               </div>
               <p className="media-overview">{overview}</p>
-              
+
               {trailer && (
                 <div className="media-trailer">
                   <h2>Trailer</h2>
@@ -127,16 +136,18 @@ function MediaDetails() {
                 <div className="media-cast">
                   <h2>Cast</h2>
                   <div className="cast-list">
-                    {credits.cast.slice(0, 6).map(person => (
+                    {credits.cast.slice(0, 6).map((person) => (
                       <div key={person.id} className="cast-member">
                         <img
-                          src={person.profile_path 
-                            ? `${TMDB_IMAGE_BASE}/w185${person.profile_path}`
-                            : 'https://via.placeholder.com/185x278?text=No+Image'
+                          src={
+                            person.profile_path
+                              ? `${TMDB_IMAGE_BASE}/w185${person.profile_path}`
+                              : "https://via.placeholder.com/185x278?text=No+Image"
                           }
                           alt={person.name}
                           onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/185x278?text=No+Image';
+                            e.target.src =
+                              "https://via.placeholder.com/185x278?text=No+Image";
                           }}
                         />
                         <h3>{person.name}</h3>
@@ -147,6 +158,20 @@ function MediaDetails() {
                 </div>
               )}
             </div>
+          </div>{" "}
+          <h1 className="personal-rating">Your Rating</h1>
+          <RatingReview rating={rating} setRating={setRating}/>
+          <h1 className="review-title">Recent Reviews</h1>
+          <div className="ratings-section">
+            <div className="rating">
+              <h2>Username here</h2>
+              <p>This is where the review will be</p>
+            </div>
+            <hr className="solid"></hr>
+            <div className="rating">
+              <h2>Username here</h2>
+              <p>This is where the review will be</p>
+            </div>
           </div>
         </div>
       </div>
@@ -154,4 +179,4 @@ function MediaDetails() {
   );
 }
 
-export default MediaDetails; 
+export default MediaDetails;

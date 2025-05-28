@@ -24,7 +24,13 @@ function Home() {
           <h1>Cinalog lets you...</h1>
           <div className='features-grid'>
             <div className='feature-item'>
-              <p>Add movies to your watchlist</p>
+              <p>Add movies and tv shows to your watchlist</p>
+            </div>
+            <div className='feature-item'>
+              <p>Rate movies on a 5-star rating system</p>
+            </div>
+            <div className='feature-item'>
+              <p>Create a Watch Diary</p>
             </div>
           </div>
         </div>
