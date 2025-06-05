@@ -12,7 +12,7 @@ function MediaDetails() {
   const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     const fetchMediaDetails = async () => {
@@ -101,6 +101,7 @@ function MediaDetails() {
             </div>
             <div className="media-info">
               <h1>{title || name}</h1>
+              <button className="watchlist-button">Add to Watchlist</button>
               <div className="media-meta">
                 <span className="media-year">{releaseYear}</span>
                 <span className="media-duration">{durationString}</span>
@@ -159,8 +160,14 @@ function MediaDetails() {
               )}
             </div>
           </div>{" "}
-          <h1 className="personal-rating">Your Rating</h1>
-          <RatingReview rating={rating} setRating={setRating}/>
+          <div className="rating-section">
+            <h1 className="personal-rating">Your Rating</h1>
+            <RatingReview rating={rating} setRating={setRating} />
+            <div className="review-section">
+            <input type="text" placeholder="Write a review"  className="review-input"/>
+            <button className="rating-button"> Submit Rating</button>
+          </div>
+          </div>
           <h1 className="review-title">Recent Reviews</h1>
           <div className="ratings-section">
             <div className="rating">

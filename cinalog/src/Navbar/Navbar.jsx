@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 import './Navbar.css';
 import SearchResults from '../SearchResults/SearchResults';
 
@@ -11,8 +13,29 @@ function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [user, setUser] = useState(null);
   const searchTimeoutRef = useRef(null);
   const searchContainerRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Listen for auth state changes
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -98,12 +121,27 @@ function Navbar() {
         />
       </div>
       <ul className={isOpen ? "nav-menu open" : "nav-menu"}>
-        <li>
-          <Link to="/login" className="nav-item">Login</Link>
-        </li>
-        <li>
-          <Link to="/register" className="nav-item">Create Account</Link>
-        </li>
+        {user ? (
+          <>
+            <li>
+              <Link to="/profile" className="nav-item">Profile</Link>
+            </li>
+            <li>
+              <button onClick={handleSignOut} className="nav-item sign-out-button">
+                Sign Out
+              </button>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link to="/login" className="nav-item">Login</Link>
+            </li>
+            <li>
+              <Link to="/register" className="nav-item">Create Account</Link>
+            </li>
+          </>
+        )}
         <div className="close-menu" onClick={() => setIsOpen(false)}>
           ✖
         </div>

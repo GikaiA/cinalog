@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
@@ -126,6 +126,7 @@ const Register = () => {
         </div>
 
         <button type="submit" className="register-button">Register</button>
+        <p className="register-link">Already have an account? <Link to="/login">Login</Link></p>
       </form>
     </div>
   );

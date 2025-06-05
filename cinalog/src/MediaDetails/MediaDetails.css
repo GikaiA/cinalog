@@ -53,6 +53,14 @@
   margin: 0 0 20px;
 }
 
+.watchlist-button{
+  border-radius: 5px;
+  border-color: transparent;
+  font-size: 18px;
+  margin-bottom: 10px;
+  background-color: #ffd700;
+}
+
 .media-meta {
   display: flex;
   align-items: center;
@@ -171,6 +179,41 @@
   display: block;
   width: 100%;
   max-width: 800px;
+}
+.rating-section{
+  display: block;
+  text-align: center;
+}
+
+.review-section{
+  padding-top: 10px;
+}
+
+.review-input{
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  margin-bottom: 10px;
+  font-size: 16px;
+  background-color: #6b6b6b;
+  color: white;
+}
+
+.rating-button{
+  background-color: #ffd700;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+.rating-button:hover{
+  background-color: #e0e0e0;
 }
 
 .solid{

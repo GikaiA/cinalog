@@ -150,6 +150,33 @@
   cursor: not-allowed;
 }
 
+.sign-out-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Supreme";
+  cursor: pointer;
+  padding: 0;
+  color: white;
+  position: relative;
+}
+
+.sign-out-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background-color: #a80b00;
+  transition: width 0.3s ease-in-out;
+}
+
+.sign-out-button:hover::after {
+  width: 100%;
+}
+
 @media screen and (max-width: 768px) {
   .menu-toggle {
     display: block;
