@@ -26,7 +26,7 @@
 .hero-title-container {
   position: absolute;
   text-align: center;
-  top: 40%;
+  top: 25%;
   width: 100%;
   color: white;
 }
@@ -44,10 +44,21 @@ font-size: 60px;
 display: block;
 }
 
-.posters-grid{{
-  
+.posters-grid{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
 }
 
+.media-poster{
+  text-decoration: none;
+}
+.poster-info{
+  color: white;
+  text-decoration: none;
+}
 .movies-tv-title {
   font-size: 40px;
   color: white;
@@ -59,8 +70,23 @@ display: block;
   column-gap: 120px;
   row-gap: 0px;
 }
+.features-title{
+  font-size: 40px;
+  color: white;
+}
 
 .feature-item{
-  background-color: red;
-  font-size: 25px;
+  display: flex;
+  background-color: rgb(136, 2, 2);
+  font-size: 32px;
+  margin-right: 10px;
+}
+
+.feature-text{
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+.feature-icon{
+  height: 100px;
 }

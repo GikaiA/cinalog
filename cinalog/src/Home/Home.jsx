@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import './Home.css';
 import cinemabg from '../videos/movie.mp4';
+import { IoStarSharp } from "react-icons/io5";
+import { FaList } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
+
 
 const TMDB_API_KEY = 'e58d19d46cc869a4aa7be5ac22a24e35';
 const TMDB_API_BASE = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
 
 function Home() {
-  const [featuredMovies, setFeaturedMovies] = useState([]);
-  const [featuredTVShows, setFeaturedTVShows] = useState([]);
+  const [featuredContent, setFeaturedContent] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,8 +30,13 @@ function Home() {
         );
         const tvData = await tvResponse.json();
 
-        setFeaturedMovies(moviesData.results.slice(0, 7)); // Get first 7 movies
-        setFeaturedTVShows(tvData.results.slice(0, 7)); // Get first 7 TV shows
+        // Combine and shuffle the content
+        const combinedContent = [
+          ...moviesData.results.slice(0, 7).map(movie => ({ ...movie, type: 'movie' })),
+          ...tvData.results.slice(0, 7).map(show => ({ ...show, type: 'tv' }))
+        ].sort(() => Math.random() - 0.5);
+
+        setFeaturedContent(combinedContent);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching featured content:', error);
@@ -39,16 +47,16 @@ function Home() {
     fetchFeaturedContent();
   }, []);
 
-  const renderMediaPoster = (item, type) => (
-    <Link to={`/${type}/${item.id}`} key={item.id} className="media-poster">
+  const renderMediaPoster = (item) => (
+    <Link to={`/${item.type}/${item.id}`} key={`${item.type}-${item.id}`} className="media-poster">
       <img
         src={`${TMDB_IMAGE_BASE}/w500${item.poster_path}`}
-        alt={type === 'movie' ? item.title : item.name}
+        alt={item.type === 'movie' ? item.title : item.name}
         className="poster-image"
       />
       <div className="poster-info">
-        <h3>{type === 'movie' ? item.title : item.name}</h3>
-        <p>{type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0]}</p>
+        <h3>{item.type === 'movie' ? item.title : item.name}</h3>
+        <p>{item.type === 'movie' ? item.release_date?.split('-')[0] : item.first_air_date?.split('-')[0]}</p>
       </div>
     </Link>
   );
@@ -67,40 +75,30 @@ function Home() {
           </p>
         </div>
         <div className='movies-tv-section'>
-          <h1 className='movies-tv-title'>Featured Movies & TV Shows</h1>
+          <h1 className='movies-tv-title'>Popular Movies & TV Shows</h1>
           
           {loading ? (
             <div className="loading">Loading...</div>
           ) : (
-            <>
-              <div className="featured-movies">
-                <h2>Popular Movies</h2>
-                <marquee></marquee>
-                <div className="posters-grid">
-                  {featuredMovies.map(movie => renderMediaPoster(movie, 'movie'))}
-                </div>
-              </div>
-              
-              {/* <div className="featured-tv">
-                <h2>Popular TV Shows</h2>
-                <div className="posters-grid">
-                  {featuredTVShows.map(show => renderMediaPoster(show, 'tv'))}
-                </div>
-              </div> */}
-            </>
+            <div className="posters-grid">
+              {featuredContent.map(item => renderMediaPoster(item))}
+            </div>
           )}
         </div>
         <div className='features-section'>
-          <h1>Cinalog lets you...</h1>
+          <h1 className='features-title'>Cinalog lets you...</h1>
           <div className='features-grid'>
             <div className='feature-item'>
-              <p>Add movies and tv shows to your watchlist</p>
+              <FaBookmark className='feature-icon' />
+              <p className='feature-text'>Add movies and tv shows to your watchlist</p>
             </div>
             <div className='feature-item'>
-              <p>Rate movies on a 5-star rating system</p>
+              <IoStarSharp className='feature-icon' />
+              <p className='feature-text'>Rate movies on a 5-star rating system</p>
             </div>
             <div className='feature-item'>
-              <p>Create a Watch Diary</p>
+              <FaList className='feature-icon' />
+              <p className='feature-text'>Create a Watch Diary</p>
             </div>
           </div>
         </div>
