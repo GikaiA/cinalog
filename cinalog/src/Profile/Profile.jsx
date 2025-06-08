@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { auth } from '../firebase';
+import { auth, database } from '../firebase';
 import { updateProfile, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { ref, onValue } from 'firebase/database';
 import './Profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const [watchlist, setWatchlist] = useState({ movie: {}, tv: {} });
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -27,6 +29,23 @@ const Profile = () => {
           username: user.displayName || '',
           email: user.email || ''
         }));
+        // Fetch user's watchlist
+        const watchlistRef = ref(database, `users/${user.uid}/watchlist`);
+        console.log('Fetching watchlist for user:', user.uid);
+        onValue(watchlistRef, (snapshot) => {
+          const data = snapshot.val() || { movie: {}, tv: {} };
+          console.log('Raw watchlist data:', data);
+          // Check if movie data exists and its structure
+          if (data.movie) {
+            console.log('Movie data:', data.movie);
+            console.log('Movie keys:', Object.keys(data.movie));
+          }
+          if (data.tv) {
+            console.log('TV data:', data.tv);
+            console.log('TV keys:', Object.keys(data.tv));
+          }
+          setWatchlist(data);
+        });
       } else {
         navigate('/login');
       }
@@ -104,6 +123,39 @@ const Profile = () => {
           setError('An error occurred while updating profile');
       }
     }
+  };
+
+  const renderWatchlist = (mediaType) => {
+    // Map the plural form to the singular form used in the database
+    const dbMediaType = mediaType === 'movies' ? 'movie' : 'tv';
+    console.log(`Rendering ${mediaType} watchlist (db type: ${dbMediaType}) with data:`, watchlist[dbMediaType]);
+    const items = watchlist[dbMediaType] || {};
+    const itemsArray = Object.values(items);
+    console.log(`${mediaType} items array:`, itemsArray);
+
+    if (itemsArray.length === 0) {
+      return <p className="no-items">No {mediaType === 'movies' ? 'movies' : 'TV shows'} in your watchlist yet.</p>;
+    }
+
+    return (
+      <div className="watchlist-list">
+        {itemsArray.map((item) => {
+          console.log(`Rendering ${mediaType} item:`, item);
+          return (
+            <Link 
+              to={`/${item.media_type}/${item.id}`} 
+              key={item.id} 
+              className="watchlist-item"
+            >
+              <div className="watchlist-item-content">
+                <h3>{item.title}</h3>
+                <p className="added-date">Added: {new Date(item.added_at).toLocaleDateString()}</p>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    );
   };
 
   if (!user) {
@@ -218,6 +270,21 @@ const Profile = () => {
             </div>
           </form>
         )}
+      </div>
+
+      {/* Watchlist Section */}
+      <div className="watchlist-section">
+        <div className="watchlist-container">
+          <h2>My Watchlist</h2>
+          
+          <div className="watchlist-tabs">
+            <h3>Movies</h3>
+            {renderWatchlist('movies')}
+            
+            <h3>TV Shows</h3>
+            {renderWatchlist('tv')}
+          </div>
+        </div>
       </div>
     </div>
   );

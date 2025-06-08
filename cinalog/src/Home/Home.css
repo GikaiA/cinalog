@@ -25,8 +25,10 @@
 
 .hero-title-container {
   position: absolute;
-  text-align: center;
   top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
   width: 100%;
   color: white;
 }
@@ -77,16 +79,28 @@ display: block;
 
 .feature-item{
   display: flex;
+  align-items: center;
   background-color: rgb(136, 2, 2);
   font-size: 32px;
   margin-right: 10px;
+  padding: 10px;
 }
 
 .feature-text{
+  color: white;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .feature-icon{
-  height: 100px;
+  width: 40px;
+  height: 40px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media(max-width: 768px){
+
 }

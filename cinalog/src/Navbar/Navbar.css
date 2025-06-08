@@ -214,4 +214,21 @@
     cursor: pointer;
     color: white;
   }
+  .title{
+    font-size: 20px;
+  }
+
+  .search-bar{
+    width: 200px;
+    font-size: 15px;
+  }
+
+  .search-button{
+    font-size: 15px;
+  }
+
+  .hero-video{
+    height: 100%;
+    width: 300px;
+  }
 }

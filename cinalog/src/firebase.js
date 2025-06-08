@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -10,6 +10,7 @@ import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyCKgfxv4b3IhyeQTqMMq-O4mWSBR0psaHc",
   authDomain: "cinalog-f0f6a.firebaseapp.com",
+  databaseURL: "https://cinalog-f0f6a-default-rtdb.firebaseio.com",
   projectId: "cinalog-f0f6a",
   storageBucket: "cinalog-f0f6a.firebasestorage.app",
   messagingSenderId: "11206906129",
@@ -19,7 +20,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
+const database = getDatabase(app);
 
-export { auth };
+export { auth, database };
