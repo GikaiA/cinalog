@@ -9,9 +9,9 @@
 * 🔍 Search for movies and TV shows using the TMDB API
 * ⭐ Rate content on a 5-star scale
 * 📝 Write and save reviews
-* 📃 Add titles to a custom watchlist
+* 📃 Add movie and tv show titles to a custom watchlist
 * 👤 User authentication with Firebase
-* 🌃 Fully responsive UI with a dark-mode design
+* 🌃 Fully responsive UI
 
 ---
 
