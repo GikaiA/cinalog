@@ -58,6 +58,8 @@
   font-size: 12px !important;
 }
 
+
+
 /* Scrollbar styling */
 .search-results-container::-webkit-scrollbar {
   width: 8px;
@@ -76,3 +78,11 @@
 .search-results-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 } 
+
+@media(max-width: 768px){
+  .search-results-container{
+   width: 445px; 
+   position: absolute;
+   left: 45%
+  };
+}

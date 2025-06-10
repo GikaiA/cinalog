@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { auth, database } from "../firebase";
-import { ref, set, remove, onValue } from "firebase/database";
+import {
+  ref,
+  set,
+  remove,
+  onValue,
+  query,
+  orderByChild,
+} from "firebase/database";
 import "./MediaDetails.css";
 import RatingReview from "../RatingReview";
 
@@ -14,9 +21,10 @@ function MediaDetails() {
   const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [rating, setRating] = useState(0);
   const [user, setUser] = useState(null);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(true);
 
   useEffect(() => {
     // Listen for auth state changes
@@ -24,10 +32,20 @@ function MediaDetails() {
       setUser(user);
       if (user) {
         // Check if the media is in user's watchlist
-        const watchlistRef = ref(database, `users/${user.uid}/watchlist/${mediaType}/${id}`);
-        console.log('Checking watchlist status for:', { mediaType, id, path: `users/${user.uid}/watchlist/${mediaType}/${id}` });
+        const watchlistRef = ref(
+          database,
+          `users/${user.uid}/watchlist/${mediaType}/${id}`
+        );
+        console.log("Checking watchlist status for:", {
+          mediaType,
+          id,
+          path: `users/${user.uid}/watchlist/${mediaType}/${id}`,
+        });
         onValue(watchlistRef, (snapshot) => {
-          console.log('Watchlist status:', snapshot.exists(), 'for', { mediaType, id });
+          console.log("Watchlist status:", snapshot.exists(), "for", {
+            mediaType,
+            id,
+          });
           setIsInWatchlist(snapshot.exists());
         });
       }
@@ -40,13 +58,20 @@ function MediaDetails() {
   const toggleWatchlist = async () => {
     if (!user) return;
 
-    const watchlistRef = ref(database, `users/${user.uid}/watchlist/${mediaType}/${id}`);
-    console.log('Toggling watchlist for:', { mediaType, id, title: media.title || media.name });
-    
+    const watchlistRef = ref(
+      database,
+      `users/${user.uid}/watchlist/${mediaType}/${id}`
+    );
+    console.log("Toggling watchlist for:", {
+      mediaType,
+      id,
+      title: media.title || media.name,
+    });
+
     try {
       if (isInWatchlist) {
         // Remove from watchlist
-        console.log('Removing from watchlist:', { mediaType, id });
+        console.log("Removing from watchlist:", { mediaType, id });
         await remove(watchlistRef);
       } else {
         // Add to watchlist
@@ -55,10 +80,13 @@ function MediaDetails() {
           title: media.title || media.name,
           poster_path: media.poster_path,
           media_type: mediaType,
-          added_at: new Date().toISOString()
+          added_at: new Date().toISOString(),
         };
-        console.log('Adding to watchlist:', watchlistItem);
-        console.log('Watchlist path:', `users/${user.uid}/watchlist/${mediaType}/${id}`);
+        console.log("Adding to watchlist:", watchlistItem);
+        console.log(
+          "Watchlist path:",
+          `users/${user.uid}/watchlist/${mediaType}/${id}`
+        );
         await set(watchlistRef, watchlistItem);
       }
     } catch (error) {
@@ -92,6 +120,32 @@ function MediaDetails() {
 
     fetchMediaDetails();
   }, [mediaType, id]);
+
+  useEffect(() => {
+    // Fetch reviews for this media
+    const reviewsRef = ref(database, `reviews/${mediaType}/${id}`);
+    const reviewsQuery = query(reviewsRef, orderByChild("createdAt"));
+
+    const unsubscribe = onValue(reviewsQuery, (snapshot) => {
+      const reviewsData = [];
+      snapshot.forEach((childSnapshot) => {
+        reviewsData.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val(),
+        });
+      });
+      // Sort reviews by creation date (newest first)
+      reviewsData.sort((a, b) => b.createdAt - a.createdAt);
+      setReviews(reviewsData);
+      setIsLoadingReviews(false);
+    });
+
+    return () => unsubscribe();
+  }, [mediaType, id]);
+
+  const handleReviewSubmitted = () => {
+    // Reviews will automatically update due to the onValue listener
+  };
 
   if (loading) {
     return <div className="media-details-loading">Loading...</div>;
@@ -153,7 +207,8 @@ function MediaDetails() {
               {!user && (
                 <div className="login-user-section">
                   <p className="login-user-sentence">
-                    Want to add this to your watchlist and give your review? Log in <Link to="/login">here</Link>.
+                    Want to add this to your watchlist and give your review? Log
+                    in <Link to="/login">here</Link>.
                   </p>
                 </div>
               )}
@@ -161,11 +216,13 @@ function MediaDetails() {
             <div className="media-info">
               <h1>{title || name}</h1>
               {user && (
-                <button 
-                  className={`watchlist-button ${isInWatchlist ? 'in-watchlist' : ''}`}
+                <button
+                  className={`watchlist-button ${
+                    isInWatchlist ? "in-watchlist" : ""
+                  }`}
                   onClick={toggleWatchlist}
                 >
-                  {isInWatchlist ? 'Added to Watchlist' : 'Add to Watchlist'}
+                  {isInWatchlist ? "Added to Watchlist" : "Add to Watchlist"}
                 </button>
               )}
               <div className="media-meta">
@@ -227,26 +284,56 @@ function MediaDetails() {
 
               {user && (
                 <div className="rating-section">
-                  <h1 className="personal-rating">Your Rating</h1>
-                  <RatingReview rating={rating} setRating={setRating} />
-                  <div className="review-section">
-                    <input type="text" placeholder="Write a review" className="review-input"/>
-                    <button className="rating-button">Submit Rating</button>
-                  </div>
+                  <h2 className="personal-rating">Write a Review</h2>
+                  <RatingReview
+                    mediaType={mediaType}
+                    mediaId={id}
+                    mediaTitle={media.title || media.name}
+                    onReviewSubmitted={handleReviewSubmitted}
+                  />
                 </div>
               )}
-            </div>
-          </div>
-          <h1 className="review-title">Recent Reviews</h1>
-          <div className="ratings-section">
-            <div className="rating">
-              <h2>Username here</h2>
-              <p>This is where the review will be</p>
-            </div>
-            <hr className="solid"></hr>
-            <div className="rating">
-              <h2>Username here</h2>
-              <p>This is where the review will be</p>
+
+              <div className="reviews-section">
+                <h2 className="reviews-title">User Reviews</h2>
+                {isLoadingReviews ? (
+                  <div className="loading-reviews">Loading reviews...</div>
+                ) : reviews.length > 0 ? (
+                  <div className="reviews-list">
+                    {reviews.map((review) => (
+                      <div key={review.id} className="review-card">
+                        <div className="review-header">
+                          <span className="review-username">
+                            {review.username}
+                          </span>
+                          <div className="review-rating">
+                            {[...Array(5)].map((_, i) => (
+                              <span
+                                key={i}
+                                className="review-star"
+                                style={{
+                                  color: i < review.rating ? "gold" : "gray",
+                                }}
+                              >
+                                ★
+                              </span>
+                            ))}
+                          </div>
+                          <span className="review-date">
+                            {new Date(review.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="review-content">{review.review}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="no-reviews">
+                    No reviews yet. Be the first to review this{" "}
+                    {mediaType === "movie" ? "movie" : "TV show"}!
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
